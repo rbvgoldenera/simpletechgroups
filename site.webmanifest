@@ -1,0 +1,20 @@
+{
+  "name": "Simple Tech Groups",
+  "short_name": "STG",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#d4af37",
+  "icons": [
+    {
+      "src": "assets/images/android-chrome-192.webp",
+      "sizes": "192x192",
+      "type": "image/webp"
+    },
+    {
+      "src": "assets/images/android-chrome-512.webp",
+      "sizes": "512x512",
+      "type": "image/webp"
+    }
+  ]
+}
