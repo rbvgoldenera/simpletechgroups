@@ -1,0 +1,74 @@
+# =====================================
+# SimpleTech Groups - Root .htaccess
+# =====================================
+
+Options -Indexes
+RewriteEngine On
+DirectoryIndex index.php
+
+# -------------------------------------
+# Allow public pages
+# -------------------------------------
+RewriteRule ^public/(.*)$ - [L]
+RewriteRule ^assets/(.*)$ - [L]
+
+# -------------------------------------
+# Block direct access to core logic
+# -------------------------------------
+RewriteRule ^(core|includes|auth)/(.*)$ - [F,L]
+
+# -------------------------------------
+# Protect role-based modules
+# -------------------------------------
+RewriteRule ^admin/?$ auth/role-check.php [L]
+RewriteRule ^client/?$ auth/role-check.php [L]
+RewriteRule ^freelancer/?$ auth/role-check.php [L]
+
+# -------------------------------------
+# Secure uploads (no script execution)
+# -------------------------------------
+<Directory "uploads">
+    php_flag engine off
+    Options -ExecCGI
+</Directory>
+
+# -------------------------------------
+# Block sensitive PHP files
+# -------------------------------------
+<FilesMatch "(db|auth|session|role|security)\.php$">
+    Require all denied
+</FilesMatch>
+
+# -------------------------------------
+# Security headers
+# -------------------------------------
+<IfModule mod_headers.c>
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# -------------------------------------
+# Cache static assets
+# -------------------------------------
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType text/css "access plus 30 days"
+    ExpiresByType application/javascript "access plus 30 days"
+</IfModule>
+
+# -------------------------------------
+# Block hidden files
+# -------------------------------------
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+# -------------------------------------
+# Custom errors
+# -------------------------------------
+ErrorDocument 403 /public/index.php
+ErrorDocument 404 /public/index.php
