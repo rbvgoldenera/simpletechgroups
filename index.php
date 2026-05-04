@@ -1,501 +1,315 @@
-<?php include ('config/config.php') ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Simple Tech Groups | Freelancer Platform Made in India</title>
+<?php
+/**
+ * CodeIgniter
+ *
+ * An open source application development framework for PHP
+ *
+ * This content is released under the MIT License (MIT)
+ *
+ * Copyright (c) 2014 - 2019, British Columbia Institute of Technology
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * @package	CodeIgniter
+ * @author	EllisLab Dev Team
+ * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
+ * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
+ * @license	https://opensource.org/licenses/MIT	MIT License
+ * @link	https://codeigniter.com
+ * @since	Version 1.0.0
+ * @filesource
+ */
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Simple Tech Groups is an Indian freelancer platform connecting talent, startups, and businesses. Built by RBV Golden Era Evolutions.">
-    <meta name="keywords" content="freelancer platform india, hire freelancers, simple tech groups, rbv golden era evolutions">
+/*
+ *---------------------------------------------------------------
+ * APPLICATION ENVIRONMENT
+ *---------------------------------------------------------------
+ *
+ * You can load different configurations depending on your
+ * current environment. Setting the environment also influences
+ * things like logging and error reporting.
+ *
+ * This can be set to anything, but default usage is:
+ *
+ *     development
+ *     testing
+ *     production
+ *
+ * NOTE: If you change these, also change the error_reporting() code below
+ */
+	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+/*
+ *---------------------------------------------------------------
+ * ERROR REPORTING
+ *---------------------------------------------------------------
+ *
+ * Different environments will require different levels of error reporting.
+ * By default development will show errors but testing and live will hide them.
+ */
+switch (ENVIRONMENT)
+{
+	case 'development':
+		error_reporting(-1);
+		ini_set('display_errors', 1);
+	break;
 
-    <link rel="icon" href="<?= $base_url ?>assets/images/favicon.png">
-    <link rel="apple-touch-icon" href="<?= $base_url ?>assets/images/favicon.png">
-    <link rel="manifest" href="<?= $base_url ?>site.webmanifest">
+	case 'testing':
+	case 'production':
+		ini_set('display_errors', 0);
+		if (version_compare(PHP_VERSION, '5.3', '>='))
+		{
+			error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT & ~E_USER_NOTICE & ~E_USER_DEPRECATED);
+		}
+		else
+		{
+			error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_USER_NOTICE);
+		}
+	break;
 
-    <style>
-        html{scroll-behavior:smooth}
-        body{font-family:Poppins;background:#000;color:#fff}
-        :root{--gold:#d4af37}
+	default:
+		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
+		echo 'The application environment is not set correctly.';
+		exit(1); // EXIT_ERROR
+}
 
-        a{text-decoration:none}
-        section{padding:150px 0}
+/*
+ *---------------------------------------------------------------
+ * SYSTEM DIRECTORY NAME
+ *---------------------------------------------------------------
+ *
+ * This variable must contain the name of your "system" directory.
+ * Set the path if it is not in the same directory as this file.
+ */
+	$system_path = 'system';
 
-        .btn-gold{
-            background:var(--gold);
-            color:#000;
-            font-weight:600;
-            border-radius:30px;
-            padding:12px 28px;
-            transition:.3s;
-        }
-        .btn-gold:hover{opacity:.9}
+/*
+ *---------------------------------------------------------------
+ * APPLICATION DIRECTORY NAME
+ *---------------------------------------------------------------
+ *
+ * If you want this front controller to use a different "application"
+ * directory than the default one you can set its name here. The directory
+ * can also be renamed or relocated anywhere on your server. If you do,
+ * use an absolute (full) server path.
+ * For more info please see the user guide:
+ *
+ * https://codeigniter.com/userguide3/general/managing_apps.html
+ *
+ * NO TRAILING SLASH!
+ */
+	$application_folder = 'application';
 
-        .navbar{
-            background:#000;
-            box-shadow:0 2px 20px rgba(212,175,55,.15);
-        }
-        .nav-link{color:#fff!important;margin-left:20px}
+/*
+ *---------------------------------------------------------------
+ * VIEW DIRECTORY NAME
+ *---------------------------------------------------------------
+ *
+ * If you want to move the view directory out of the application
+ * directory, set the path to it here. The directory can be renamed
+ * and relocated anywhere on your server. If blank, it will default
+ * to the standard location inside your application directory.
+ * If you do move this, use an absolute (full) server path.
+ *
+ * NO TRAILING SLASH!
+ */
+	$view_folder = '';
 
-        .hero{
-            min-height:100vh;
-            display:flex;
-            align-items:center;
-            background:
-                radial-gradient(circle at right, rgba(212,175,55,.15), transparent 60%),
-                linear-gradient(rgba(0,0,0,.8), rgba(0,0,0,.9)),
-                url("https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1600&q=70&fm=webp");
-            background-size:cover;
-            background-position:center;
-            box-shadow:inset 0 -120px 120px rgba(0,0,0,.6);
-        }
 
-        .hero-image{position:relative;text-align:center}
-        .hero-image img{
-            max-width:100%;
-            border-radius:20px;
-            background:rgba(255,255,255,.05);
-            backdrop-filter:blur(6px);
-            border:1px solid rgba(212,175,55,.25);
-            box-shadow:0 0 60px rgba(212,175,55,.25);
-        }
-        .hero-glow{
-            position:absolute;
-            top:-20%;
-            right:-20%;
-            width:300px;
-            height:300px;
-            background:radial-gradient(circle, rgba(212,175,55,.35), transparent 70%);
-            z-index:-1;
-        }
+/*
+ * --------------------------------------------------------------------
+ * DEFAULT CONTROLLER
+ * --------------------------------------------------------------------
+ *
+ * Normally you will set your default controller in the routes.php file.
+ * You can, however, force a custom routing by hard-coding a
+ * specific controller class/function here. For most applications, you
+ * WILL NOT set your routing here, but it's an option for those
+ * special instances where you might want to override the standard
+ * routing in a specific front controller that shares a common CI installation.
+ *
+ * IMPORTANT: If you set the routing here, NO OTHER controller will be
+ * callable. In essence, this preference limits your application to ONE
+ * specific controller. Leave the function name blank if you need
+ * to call functions dynamically via the URI.
+ *
+ * Un-comment the $routing array below to use this feature
+ */
+	// The directory name, relative to the "controllers" directory.  Leave blank
+	// if your controller is not in a sub-directory within the "controllers" one
+	// $routing['directory'] = '';
 
-        .card-dark{
-            background:#0e0e0e;
-            border:1px solid rgba(212,175,55,.25);
-            border-radius:18px;
-            padding:30px;
-            height:100%;
-            transition:.3s;
-        }
-        .card-dark:hover{
-            border-color:var(--gold);
-            transform:translateY(-8px);
-        }
-        .card-dark img{transition:.3s}
-        .card-dark:hover img{transform:scale(1.03)}
-        .card-dark h5::before{content:"● ";color:var(--gold)}
+	// The controller class file name.  Example:  mycontroller
+	// $routing['controller'] = '';
 
-        .section-title{color:var(--gold);font-weight:600}
+	// The controller function you wish to be called.
+	// $routing['function']	= '';
 
-        .form-control{
-            background:#000;
-            border:1px solid #444;
-            color:#fff;
-            padding:14px 16px;
-        }
-        .form-control::placeholder{color:#999}
-        .form-control:focus{
-            border-color:var(--gold);
-            box-shadow:none;
-        }
 
-        #join .card-dark{
-            padding:40px;
-            box-shadow:0 0 50px rgba(0,0,0,.7);
-        }
+/*
+ * -------------------------------------------------------------------
+ *  CUSTOM CONFIG VALUES
+ * -------------------------------------------------------------------
+ *
+ * The $assign_to_config array below will be passed dynamically to the
+ * config class when initialized. This allows you to set custom config
+ * items or override any default config values found in the config.php file.
+ * This can be handy as it permits you to share one application between
+ * multiple front controller files, with each file containing different
+ * config values.
+ *
+ * Un-comment the $assign_to_config array below to use this feature
+ */
+	// $assign_to_config['name_of_config_item'] = 'value of config item';
 
-        footer{
-            border-top:1px solid #222;
-            padding:30px 0;
-            text-align:center;
-            font-size:14px;
-            box-shadow:0 -1px 20px rgba(212,175,55,.15);
-        }
-        /* =========================
-   MOBILE OPTIMIZATION
-========================= */
 
-        @media (max-width: 991px) {
 
-            section {
-                padding: 70px 0;
-            }
+// --------------------------------------------------------------------
+// END OF USER CONFIGURABLE SETTINGS.  DO NOT EDIT BELOW THIS LINE
+// --------------------------------------------------------------------
 
-            /* NAVBAR */
-            .navbar-brand img {
-                height: 55px;
-            }
+/*
+ * ---------------------------------------------------------------
+ *  Resolve the system path for increased reliability
+ * ---------------------------------------------------------------
+ */
 
-            .nav-link {
-                margin-left: 0;
-                padding: 10px 0;
-                text-align: center;
-            }
+	// Set the current directory correctly for CLI requests
+	if (defined('STDIN'))
+	{
+		chdir(dirname(__FILE__));
+	}
 
-            .navbar-collapse {
-                background: #000;
-                padding: 15px 0;
-            }
+	if (($_temp = realpath($system_path)) !== FALSE)
+	{
+		$system_path = $_temp.DIRECTORY_SEPARATOR;
+	}
+	else
+	{
+		// Ensure there's a trailing slash
+		$system_path = strtr(
+			rtrim($system_path, '/\\'),
+			'/\\',
+			DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+		).DIRECTORY_SEPARATOR;
+	}
 
-            /* HERO */
-            .hero {
-                min-height: auto;
-                padding-top: 120px;
-                padding-bottom: 80px;
-                text-align: center;
-            }
+	// Is the system path correct?
+	if ( ! is_dir($system_path))
+	{
+		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
+		echo 'Your system folder path does not appear to be set correctly. Please open the following file and correct this: '.pathinfo(__FILE__, PATHINFO_BASENAME);
+		exit(3); // EXIT_CONFIG
+	}
 
-            .hero h1 {
-                font-size: 2.2rem;
-                line-height: 1.3;
-            }
+/*
+ * -------------------------------------------------------------------
+ *  Now that we know the path, set the main path constants
+ * -------------------------------------------------------------------
+ */
+	// The name of THIS file
+	define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
 
-            .hero h4 {
-                font-size: 1.2rem;
-            }
+	// Path to the system directory
+	define('BASEPATH', $system_path);
 
-            .hero p {
-                font-size: 1rem;
-            }
+	// Path to the front controller (this file) directory
+	define('FCPATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
 
-            .hero-image {
-                margin-top: 30px;
-            }
+	// Name of the "system" directory
+	define('SYSDIR', basename(BASEPATH));
 
-            .hero-image img {
-                max-width: 90%;
-            }
+	// The path to the "application" directory
+	if (is_dir($application_folder))
+	{
+		if (($_temp = realpath($application_folder)) !== FALSE)
+		{
+			$application_folder = $_temp;
+		}
+		else
+		{
+			$application_folder = strtr(
+				rtrim($application_folder, '/\\'),
+				'/\\',
+				DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+			);
+		}
+	}
+	elseif (is_dir(BASEPATH.$application_folder.DIRECTORY_SEPARATOR))
+	{
+		$application_folder = BASEPATH.strtr(
+			trim($application_folder, '/\\'),
+			'/\\',
+			DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+		);
+	}
+	else
+	{
+		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
+		echo 'Your application folder path does not appear to be set correctly. Please open the following file and correct this: '.SELF;
+		exit(3); // EXIT_CONFIG
+	}
 
-            .hero-glow {
-                display: none;
-            }
+	define('APPPATH', $application_folder.DIRECTORY_SEPARATOR);
 
-            /* BUTTONS */
-            .hero .btn {
-                width: 100%;
-                margin-bottom: 12px;
-            }
+	// The path to the "views" directory
+	if ( ! isset($view_folder[0]) && is_dir(APPPATH.'views'.DIRECTORY_SEPARATOR))
+	{
+		$view_folder = APPPATH.'views';
+	}
+	elseif (is_dir($view_folder))
+	{
+		if (($_temp = realpath($view_folder)) !== FALSE)
+		{
+			$view_folder = $_temp;
+		}
+		else
+		{
+			$view_folder = strtr(
+				rtrim($view_folder, '/\\'),
+				'/\\',
+				DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+			);
+		}
+	}
+	elseif (is_dir(APPPATH.$view_folder.DIRECTORY_SEPARATOR))
+	{
+		$view_folder = APPPATH.strtr(
+			trim($view_folder, '/\\'),
+			'/\\',
+			DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+		);
+	}
+	else
+	{
+		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
+		echo 'Your view folder path does not appear to be set correctly. Please open the following file and correct this: '.SELF;
+		exit(3); // EXIT_CONFIG
+	}
 
-            /* CARDS */
-            .card-dark {
-                padding: 25px;
-            }
+	define('VIEWPATH', $view_folder.DIRECTORY_SEPARATOR);
 
-            /* FORMS */
-            .form-control {
-                font-size: 16px; /* prevents mobile zoom */
-            }
-
-            #join .card-dark {
-                padding: 25px;
-            }
-
-            /* FOOTER */
-            footer {
-                font-size: 13px;
-                line-height: 1.6;
-            }
-        }
-
-        /* EXTRA SMALL DEVICES */
-        @media (max-width: 576px) {
-
-            .hero h1 {
-                font-size: 1.9rem;
-            }
-
-            .section-title {
-                font-size: 1.5rem;
-            }
-
-            h4 {
-                font-size: 1.1rem;
-            }
-        }
-        /* =========================
-            GOLD NAVBAR TOGGLER ICON
-           ========================= */
-        .navbar-toggler {
-            border: 1px solid var(--gold);
-            padding: 6px 10px;
-        }
-        .navbar-toggler:focus {
-            box-shadow: none;
-        }
-        /* Bootstrap hamburger icon override */
-        .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(212,175,55,1)' stroke-width='2.2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-        }
-    </style>
-</head>
-
-<body>
-
-<!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg fixed-top">
-    <div class="container">
-        <a class="navbar-brand" href="#">
-            <img src="<?= $base_url ?>assets/images/site_logo.png" height="80" alt="Simple Tech Groups">
-        </a>
-        <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu"
-                style="border:1px solid var(--gold);">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end" id="menu">
-            <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="#how">How It Works</a></li>
-                <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
-                <li class="nav-item"><a class="nav-link" href="#join">Join</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-7">
-                <h1 class="fw-bold mb-3">
-                    Build Careers.<br>Build Businesses.<br>
-                    <span style="color:var(--gold)">Build the Future.</span>
-                </h1>
-                <h4 class="fw-light mb-4">
-                    Endless Horizons. <span style="color:var(--gold)">Infinite Possibilities.</span>
-                </h4>
-                <p class="fs-5">
-                    <strong>Simple Tech Groups</strong> is a <strong>next-generation freelancer and innovation platform made in India 🇮🇳</strong>,
-                    connecting <strong>talented professionals, startups, and enterprises</strong>.
-                </p>
-                <p class="text-muted">Powered by <strong>RBV Golden Era Evolutions</strong></p>
-                <div class="mt-4">
-                    <a href="#join" class="btn btn-gold me-3 mb-2">Join as Freelancer</a>
-                    <a href="#services" class="btn btn-outline-warning mb-2">Hire Top Talent</a>
-                </div>
-                <div class="mt-4 text-muted small">
-                    ✔ Made in India &nbsp;|&nbsp; ✔ Freelancer-First &nbsp;|&nbsp; ✔ Business-Ready Solutions
-                </div>
-            </div>
-
-            <div class="col-lg-5 d-none d-lg-block hero-image">
-                <div class="hero-glow"></div>
-                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=70&fm=webp"
-                     alt="Freelancers collaborating"
-                     loading="lazy"
-                     width="525"
-                     height="350"
-                >
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ABOUT -->
-<section id="about">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <h2 class="section-title">Who We Are</h2>
-                <h4 class="mt-2">Innovating Futures. Empowering Today.</h4>
-                <p class="mt-4">
-                    Simple Tech Groups is a technology-focused community that connects
-                    <strong>freelancers, startups, enterprises, and learners</strong>.
-                </p>
-                <p>
-                    We believe in creating opportunities, nurturing talent, and delivering
-                    impactful digital solutions that shape the future.
-                </p>
-            </div>
-            <div class="col-lg-6">
-                <div class="card-dark">
-                    <h5 class="text-warning">Our Vision</h5>
-                    <p>To become India’s most trusted freelancer and innovation platform.</p>
-                    <h5 class="text-warning mt-3">Our Mission</h5>
-                    <p>
-                        Empower individuals with skills, connect businesses with talent,
-                        and build scalable digital solutions with integrity and innovation.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section id="how">
-    <div class="container">
-        <h2 class="section-title text-center">How Simple Tech Groups Works</h2>
-        <div class="row mt-5">
-            <div class="col-md-4 mb-4">
-                <div class="card-dark">
-                    <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=600&q=70&fm=webp" class="img-fluid rounded mb-3">
-                    <h5>1. Join the Platform</h5>
-                    <p>Sign up as a freelancer, student, startup, or business.</p>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card-dark">
-                    <img src="https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=600&q=70&fm=webp" class="img-fluid rounded mb-3">
-                    <h5>2. Connect & Collaborate</h5>
-                    <p>Get matched with real projects, clients, and teams.</p>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card-dark">
-                    <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=600&q=70&fm=webp" class="img-fluid rounded mb-3">
-                    <h5>3. Build & Grow</h5>
-                    <p>Earn, learn, and scale your career or business.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- SERVICES -->
-<section id="services">
-    <div class="container">
-        <h2 class="section-title text-center">What We Offer</h2>
-        <div class="row mt-5">
-
-            <div class="col-md-4 mb-4">
-                <div class="card-dark">
-                    <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=70&fm=webp" class="img-fluid rounded mb-3">
-                    <h5>Freelancer Marketplace</h5>
-                    <p>Developers, designers, marketers, content creators & consultants.</p>
-                </div>
-            </div>
-
-            <div class="col-md-4 mb-4">
-                <div class="card-dark">
-                    <img src="https://images.unsplash.com/photo-1531498860502-7c67cf02f657?auto=format&fit=crop&w=600&q=70&fm=webp" class="img-fluid rounded mb-3">
-                    <h5>Business & Startup Solutions</h5>
-                    <p>Web, app, CRM, ERP, automation & digital transformation.</p>
-                </div>
-            </div>
-
-            <div class="col-md-4 mb-4">
-                <div class="card-dark">
-                    <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=600&q=70&fm=webp" class="img-fluid rounded mb-3">
-                    <h5>Internships & Skill Development</h5>
-                    <p>Live projects, mentorship, career guidance & exposure.</p>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-<!-- WHY CHOOSE -->
-<section id="why-choose">
-    <div class="container">
-        <h2 class="section-title text-center">Why Choose Simple Tech Groups?</h2>
-        <p class="text-center mt-3 text-muted">
-            More than a platform — a community built for growth, trust, and innovation.
-        </p>
-
-        <div class="row mt-5">
-            <div class="col-md-6 mb-4"><div class="card-dark"><h5>Made in India, Built for the World</h5><p>Empowering Indian talent with global standards.</p></div></div>
-            <div class="col-md-6 mb-4"><div class="card-dark"><h5>Freelancer-First Ecosystem</h5><p>Fair opportunities & sustainable growth.</p></div></div>
-            <div class="col-md-6 mb-4"><div class="card-dark"><h5>Real Projects, Real Impact</h5><p>Meaningful work with real outcomes.</p></div></div>
-            <div class="col-md-6 mb-4"><div class="card-dark"><h5>Learning While Earning</h5><p>Mentorship, internships & experience.</p></div></div>
-            <div class="col-md-6 mb-4"><div class="card-dark"><h5>Transparent & Ethical</h5><p>Trust-driven collaboration.</p></div></div>
-            <div class="col-md-6 mb-4"><div class="card-dark"><h5>Industry-Backed</h5><p>Powered by RBV Golden Era Evolutions.</p></div></div>
-        </div>
-
-        <div class="text-center mt-4">
-            <p class="fw-semibold text-warning">
-                We don’t just connect people — we build careers, businesses, and futures.
-            </p>
-        </div>
-    </div>
-</section>
-
-<!-- JOIN -->
-<section id="join">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="section-title">Join Our Innovative Community</h2>
-            <p class="mt-3 text-muted">
-                Whether you are a freelancer, student, startup, or enterprise —
-                <strong>this is your platform to grow.</strong>
-            </p>
-        </div>
-
-        <div class="row justify-content-center">
-            <div class="col-lg-7">
-                <div class="card-dark">
-                    <form id="joinForm">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <input type="text" name="name" class="form-control" placeholder="Full Name" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <input type="email" name="email" class="form-control" placeholder="Email Address" required>
-                            </div>
-                        </div>
-
-                        <input type="text" name="phone" class="form-control mb-3" placeholder="Contact Number" required>
-
-                        <textarea name="message" class="form-control mb-4" rows="4" placeholder="Message" required></textarea>
-
-                        <button type="submit" class="btn btn-gold w-100" id="submitBtn">
-                            <span id="btnText">Join Now</span>
-                            <span id="btnLoader" class="spinner-border spinner-border-sm ms-2" style="display:none;"></span>
-                        </button>
-                    </form>
-                    <div id="formMsg" class="text-success text-center mt-3" style="display:none;">
-                        ✅ Thank you! We will contact you shortly.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-    © 2026 Simple Tech Groups — A Product of <strong>RBV Golden Era Evolutions</strong><br>
-    Made in India 🇮🇳 | Empowering Digital Futures
-</footer>
-<script>
-    document.getElementById('joinForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        const form = this;
-        const btn = document.getElementById('submitBtn');
-        const btnText = document.getElementById('btnText');
-        const loader = document.getElementById('btnLoader');
-        const msg = document.getElementById('formMsg');
-
-        // show loader
-        btn.disabled = true;
-        btnText.innerText = 'Sending...';
-        loader.style.display = 'inline-block';
-        msg.style.display = 'none';
-
-        fetch('helpers/send-mail.php', {
-            method: 'POST',
-            body: new FormData(form)
-        }).then(() => {
-            // hide loader
-            btn.disabled = false;
-            btnText.innerText = 'Join Now';
-            loader.style.display = 'none';
-
-            msg.style.display = 'block';
-            form.reset();
-        }).catch(() => {
-            // still restore UI silently
-            btn.disabled = false;
-            btnText.innerText = 'Join Now';
-            loader.style.display = 'none';
-        });
-    });
-</script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+/*
+ * --------------------------------------------------------------------
+ * LOAD THE BOOTSTRAP FILE
+ * --------------------------------------------------------------------
+ *
+ * And away we go...
+ */
+require_once BASEPATH.'core/CodeIgniter.php';
