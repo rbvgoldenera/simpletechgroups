@@ -235,6 +235,11 @@ switch (ENVIRONMENT)
 	// Name of the "system" directory
 	define('SYSDIR', basename(BASEPATH));
 
+	require_once __DIR__ . '/vendor/autoload.php';
+
+	$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+	$dotenv->load();
+
 	// The path to the "application" directory
 	if (is_dir($application_folder))
 	{

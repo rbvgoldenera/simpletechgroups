@@ -9,7 +9,7 @@
 
 A modern, scalable **Freelance Platform** designed, developed, and hosted in **India**, focused on empowering freelancers, startups, and businesses through seamless digital collaboration.
 
-🌐 **Live Platform:** https://simpletechgroups.com/
+🌐 **Live Platform:** <?=base_url()?>
 
 ---
 
@@ -46,7 +46,7 @@ This platform is proudly built as a **Made in India** digital product, supportin
 
 ## 🌍 Hosting Details
 
-- **Live URL:** https://simpletechgroups.com/  
+- **Live URL:** <?=base_url()?>  
 - **Environment:** Production  
 - **Access:** Public  
 
@@ -57,6 +57,7 @@ This platform is proudly built as a **Made in India** digital product, supportin
 - **Frontend:** HTML, CSS, JavaScript, Bootstrap, jQuery, DataTables  
 - **Backend:** PHP  
 - **Database:** MySQL  
+- **Framework:** CodeIgniter3  
 - **Version Control:** Git & GitHub  
 
 ---
