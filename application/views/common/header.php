@@ -88,14 +88,14 @@
 <!-- Header -->
 <header>
 	<div class="container">
-		<a href="#" class="logo">
+		<a href="<?= base_url()?>" class="logo">
 			<img src="<?=base_url('assets/')?>images/logo.png" alt="Simple Tech Groups Logo" style="height: 40px;">
 		</a>
 
 		<nav>
 			<div class="menu-toggle" onclick="toggleMenu()">☰</div>
 			<ul>
-				<li><a href="#" class="active">Home</a></li>
+				<li><a href="<?= base_url()?>" class="active">Home</a></li>
 				<li><a href="#">Companies</a></li>
 				<li><a href="#">Jobs</a></li>
 				<li><a href="#">Blog</a></li>
@@ -104,8 +104,8 @@
 		</nav>
 
 		<div class="auth-buttons">
-			<a href="#" class="btn btn-ghost">Log In</a>
-			<a href="#" class="btn btn-primary">Sign Up</a>
+			<a href="<?= base_url('login')?>" class="btn btn-ghost">Log In</a>
+			<a href="<?= base_url('register')?>" class="btn btn-primary">Sign Up</a>
 		</div>
 	</div>
 </header>
