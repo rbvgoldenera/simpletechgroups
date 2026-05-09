@@ -53,5 +53,6 @@ $route['default_controller'] = 'home';
 $route['login'] = 'authorization/login';
 $route['register'] = 'authorization/register';
 $route['forgot-password'] = 'authorization/forgot_password';
+$route['verify-email'] = 'authorization/verify_email';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

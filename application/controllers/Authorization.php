@@ -21,4 +21,10 @@ class Authorization extends CI_Controller {
 		$this->load->view('authorization/forget_password');
 		$this->load->view('common/footer');
 	}
+	public function verify_email()
+	{
+		$this->load->view('common/header');
+		$this->load->view('authorization/verify_email');
+		$this->load->view('common/footer');
+	}
 }
