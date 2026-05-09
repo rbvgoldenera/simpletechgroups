@@ -166,7 +166,7 @@
 				<!-- Login -->
 				<div class="login-link">
 					Already have an account?
-					<a href="<?= base_url('register')?>">Login</a>
+					<a href="<?= base_url('login')?>">Login</a>
 				</div>
 
 			</form>

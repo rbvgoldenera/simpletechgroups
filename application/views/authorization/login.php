@@ -97,7 +97,7 @@
 				<!-- Register -->
 				<div class="register-link">
 					Don’t have an account?
-					<a href="<?= base_url('login')?>">Create Account</a>
+					<a href="<?= base_url('register')?>">Create Account</a>
 				</div>
 
 			</form>
