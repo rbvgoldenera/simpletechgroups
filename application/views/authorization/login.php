@@ -70,7 +70,7 @@
 						Remember Me
 					</label>
 
-					<a href="#" class="forgot-link">Forgot Password?</a>
+					<a href="<?= base_url('forgot-password') ?>" class="forgot-link">Forgot Password?</a>
 				</div>
 
 				<!-- Button -->

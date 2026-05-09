@@ -15,4 +15,10 @@ class Authorization extends CI_Controller {
 		$this->load->view('authorization/login');
 		$this->load->view('common/footer');
 	}
+	public function forgot_password()
+	{
+		$this->load->view('common/header');
+		$this->load->view('authorization/forget_password');
+		$this->load->view('common/footer');
+	}
 }
